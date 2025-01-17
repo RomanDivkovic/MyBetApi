@@ -1,0 +1,28 @@
+version: 2.1
+
+executors:
+  dotnet-executor:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:8.0
+    working_directory: ~/repo
+
+jobs:
+  build-and-test:
+    executor: dotnet-executor
+    steps:
+      - checkout
+      - run:
+          name: Restore NuGet packages
+          command: dotnet restore
+      - run:
+          name: Build the project
+          command: dotnet build --no-restore
+      - run:
+          name: Run tests
+          command: dotnet test --no-build
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build-and-test
