@@ -56,16 +56,11 @@ namespace MyBetApi.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
 
                     b.HasIndex("InvitedUserId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("GroupInvitations");
                 });
@@ -87,38 +82,35 @@ namespace MyBetApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("PhoneNumber")
-                        .IsUnique()
-                        .HasFilter("[PhoneNumber] IS NOT NULL");
-
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ApiBet.Models.UserGroup", b =>
                 {
-                    b.Property<int>("GroupId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
 
-                    b.HasKey("GroupId", "UserId");
+                    b.HasKey("UserId", "GroupId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("GroupId");
 
                     b.ToTable("UserGroups");
                 });
@@ -190,14 +182,10 @@ namespace MyBetApi.Migrations
                         .IsRequired();
 
                     b.HasOne("ApiBet.Models.User", "InvitedUser")
-                        .WithMany()
+                        .WithMany("Invitations")
                         .HasForeignKey("InvitedUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ApiBet.Models.User", null)
-                        .WithMany("Invitations")
-                        .HasForeignKey("UserId");
 
                     b.Navigation("Group");
 
