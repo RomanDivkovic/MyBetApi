@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MyBetApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0713a58918dbd397ec66eb17d3ebe2429e5d45e8")]
 [assembly: System.Reflection.AssemblyProductAttribute("MyBetApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MyBetApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
