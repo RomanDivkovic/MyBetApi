@@ -170,3 +170,5 @@
 /Users/romandivkovic/Documents/Repos/MyBetApi/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /Users/romandivkovic/Documents/Repos/MyBetApi/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /Users/romandivkovic/Documents/Repos/MyBetApi/obj/Debug/net8.0/MyBetApi.sourcelink.json
+/Users/romandivkovic/Documents/Repos/MyBetApi/bin/Debug/net8.0/Npgsql.dll
+/Users/romandivkovic/Documents/Repos/MyBetApi/bin/Debug/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll
