@@ -7,6 +7,18 @@ executors:
     working_directory: ~/repo
 
 jobs:
+  deploy:
+    docker:
+      - image: docker:20.10
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker Image
+          command: docker build -t your-docker-repo/mybetapi .
+      - run:
+          name: Push Docker Image
+          command: docker push your-docker-repo/mybetapi:latest
   build-and-test:
     executor: dotnet-executor
     steps:
