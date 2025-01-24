@@ -1,0 +1,5 @@
+# Ignorera byggmappar och lokala inställningar
+bin/
+obj/
+node_modules/
+.env
