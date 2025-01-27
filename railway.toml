@@ -1,8 +1,5 @@
 [build]
-# Instruera Railway att använda din Docker-image
-builder = "docker"
-image = "divkovicroman/mybetapi:latest"
+builder = "dockerfile"
 
 [deploy]
-# Kommandot som körs för att starta applikationen
-start = "dotnet MyBetApi.dll"
+command = "docker pull divkovicroman/mybetapi:latest && docker run -p 8080:80 divkovicroman/mybetapi:latest"
