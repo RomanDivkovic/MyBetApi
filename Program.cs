@@ -1,52 +1,37 @@
-using ApiBet.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using ApiBet.Data; // Lägg till detta för att använda BettingContext
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Lägg till DbContext-tjänsten med PostgreSQL
-builder.Services.AddDbContext<BettingContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Hämta Connection String från miljövariabler
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL");
 
-// 2. Lägg till kontroller och Swagger
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new Exception("Connection string for the database is not set. Ensure the 'DATABASE_PUBLIC_URL' environment variable is configured.");
+}
+
+// Lägg till DbContext med PostgreSQL-anslutning
+builder.Services.AddDbContext<BettingContext>(options =>
+    options.UseNpgsql(connectionString));
+
+// Lägg till tjänster i containern
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 3. Konfigurera JWT-autentisering
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
-            )
-        };
-    });
-
-builder.Services.AddAuthorization();
-
 var app = builder.Build();
 
-// 4. Middleware-pipeline
+// Middleware för utveckling
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// Middleware för produktion
 app.UseHttpsRedirection();
-app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

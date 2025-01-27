@@ -2,4 +2,4 @@
 builder = "dockerfile"
 
 [deploy]
-command = "docker pull divkovicroman/mybetapi:latest && docker run -p 8080:80 divkovicroman/mybetapi:latest"
+command = "docker pull divkovicroman/mybetapi:latest && docker run -e PGDATABASE=${PGDATABASE} -e PGHOST=${PGHOST} -e PGPORT=${PGPORT} -e PGUSER=${PGUSER} -e PGPASSWORD=${PGPASSWORD} -p 8080:80 divkovicroman/mybetapi:latest"
