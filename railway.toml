@@ -1,5 +1,12 @@
 [build]
-builder = "dockerfile"
+builder = "NIXPACKS"
+buildCommand = "docker pull divkovicroman/mybetapi:latest && docker run -p 8080:80 divkovicroman/mybetapi:latest"
 
 [deploy]
-command = "docker pull divkovicroman/mybetapi:latest && docker run -e PGDATABASE=${PGDATABASE} -e PGHOST=${PGHOST} -e PGPORT=${PGPORT} -e PGUSER=${PGUSER} -e PGPASSWORD=${PGPASSWORD} -p 8080:80 divkovicroman/mybetapi:latest"
+region = "us-west2"
+runtime = "V2"
+numReplicas = 1
+sleepApplication = false
+multiRegionConfig = {"us-west2":{"numReplicas":1}}
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
