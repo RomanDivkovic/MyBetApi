@@ -58,6 +58,12 @@ namespace ApiBet.Controllers
         return BadRequest(ModelState);
       }
 
+      // Kolla om användarnamnet redan finns
+      if (await _context.Users.AnyAsync(u => u.Username == request.Username))
+      {
+        return BadRequest("Användarnamnet är redan taget.");
+      }
+
       var user = new User
       {
         Username = request.Username,
@@ -98,10 +104,10 @@ namespace ApiBet.Controllers
 
       var claims = new[]
       {
-        new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-      };
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+            };
 
       var token = new JwtSecurityToken(
           issuer: _configuration["Jwt:Issuer"],
@@ -229,6 +235,4 @@ namespace ApiBet.Controllers
       return Ok($"Användare med ID {id} raderades.");
     }
   }
-
-
 }

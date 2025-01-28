@@ -1,19 +1,47 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using ApiBet.Data; // Lägg till detta för att använda BettingContext
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Hämta Connection String från miljövariabler
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL");
+// Hämta Connection String från Railway eller appsettings.json
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
-if (string.IsNullOrEmpty(connectionString))
+if (string.IsNullOrEmpty(databaseUrl))
 {
-    throw new Exception("Connection string for the database is not set. Ensure the 'DATABASE_PUBLIC_URL' environment variable is configured.");
+    throw new Exception("Connection string is not set. Ensure 'DATABASE_PUBLIC_URL' is configured.");
+}
+
+// Omvandla DATABASE_PUBLIC_URL (Railway-format) till Npgsql-anslutningssträng om nödvändigt
+string connectionString = databaseUrl;
+if (databaseUrl.StartsWith("postgresql://"))
+{
+    var uri = new Uri(databaseUrl);
+    var userInfo = uri.UserInfo.Split(':');
+    connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true;";
 }
 
 // Lägg till DbContext med PostgreSQL-anslutning
-builder.Services.AddDbContext<BettingContext>(options =>
+builder.Services.AddDbContext<ApiBet.Data.BettingContext>(options =>
     options.UseNpgsql(connectionString));
+
+// Lägg till autentisering och JWT-konfiguration
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
 
 // Lägg till tjänster i containern
 builder.Services.AddControllers();
@@ -29,9 +57,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Middleware för autentisering och auktorisering
+app.UseAuthentication();
+app.UseAuthorization();
+
 // Middleware för produktion
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
