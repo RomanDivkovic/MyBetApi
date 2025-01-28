@@ -1,12 +1,12 @@
-# Byt ut din nuvarande SDK-version till denna:
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
-COPY . ./
-RUN dotnet restore
-RUN dotnet publish -c Release -o /out
+[phases.setup]
+  nixPkgs = ["dotnet-sdk_8"]
 
-# Byt ut din nuvarande runtime-version till denna:
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
-WORKDIR /app
-COPY --from=build /out ./
-ENTRYPOINT ["dotnet", "MyBetApi.dll"]
+[phases.build]
+  cmds = [
+    "dotnet restore",
+    "dotnet build --configuration Release",
+    "dotnet publish -c Release -o /app/out"
+  ]
+
+[start]
+  cmd = "dotnet /app/out/MyBetApi.dll"
