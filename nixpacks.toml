@@ -3,6 +3,7 @@ nixPkgs = ["dotnet-sdk_8"]
 
 [phases.build]
 cmds = [
+    "dotnet --info", # Debuggning för att se att rätt SDK används
     "dotnet restore",
     "dotnet build --configuration Release",
     "dotnet publish -c Release -o /app/out"
