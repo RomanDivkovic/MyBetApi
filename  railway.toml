@@ -1,7 +1,0 @@
-[build]
-  builder = "nixpacks"
-  buildCommand = "dotnet restore && dotnet build --configuration Release && dotnet publish -c Release -o /app/out"
-  environment = { DOTNET_VERSION = "8.0" }
-
-[start]
-  startCommand = "dotnet /app/out/MyBetApi.dll"
