@@ -1,13 +1,5 @@
-[phases.setup]
-nixPkgs = ["dotnet-sdk_8"]
+[build]
+builder = "DOCKERFILE"
 
-[phases.build]
-cmds = [
-    "dotnet --info", # Debuggning för att se att rätt SDK används
-    "dotnet restore",
-    "dotnet build --configuration Release",
-    "dotnet publish -c Release -o /app/out"
-]
-
-[start]
-cmd = "dotnet /app/out/MyBetApi.dll"
+[deploy]
+startCommand = "dotnet MyBetApi.dll"
