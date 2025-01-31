@@ -65,4 +65,11 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 app.MapControllers();
 
+// **Automatiskt kör migrationer vid start**
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApiBet.Data.BettingContext>();
+    dbContext.Database.Migrate(); // Skapar tabeller om de inte finns
+}
+
 app.Run();
