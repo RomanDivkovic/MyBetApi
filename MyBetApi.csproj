@@ -20,4 +20,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
   </ItemGroup>
 
+  <!-- LÄGG TILL DENNA DEL FÖR MIGRATIONSFILER -->
+  <ItemGroup>
+    <Content Include="Migrations/**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

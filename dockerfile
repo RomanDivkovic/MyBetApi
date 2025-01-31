@@ -1,12 +1,11 @@
-# Byggfas - Använder .NET SDK för att bygga appen
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY . .
 RUN dotnet restore
-RUN dotnet publish -c Release -o /out
+RUN dotnet publish -c Release -o /app
 
-# Runtime - Använder en lättare ASP.NET Core runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build /out .
-ENTRYPOINT ["dotnet", "MyBetApi.dll"]
+COPY --from=build /app .
+RUN dotnet ef database update # 👈 Kör migrationer under bygget
+ENTRYPOINT ["dotnet", "DinApp.dll"]
