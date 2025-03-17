@@ -127,18 +127,15 @@ namespace MyBetApi.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Result")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("UserId")

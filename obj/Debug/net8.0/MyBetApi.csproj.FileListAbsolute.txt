@@ -172,3 +172,5 @@
 /Users/romandivkovic/Documents/Repos/MyBetApi/obj/Debug/net8.0/MyBetApi.sourcelink.json
 /Users/romandivkovic/Documents/Repos/MyBetApi/bin/Debug/net8.0/Npgsql.dll
 /Users/romandivkovic/Documents/Repos/MyBetApi/bin/Debug/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Users/romandivkovic/Documents/Repos/MyBetApi/bin/Debug/net8.0/Migrations/20250317125925_InitialCreate.cs
+/Users/romandivkovic/Documents/Repos/MyBetApi/bin/Debug/net8.0/Migrations/20250317125925_InitialCreate.Designer.cs
