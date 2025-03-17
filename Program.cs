@@ -6,14 +6,22 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Hämta Connection String från Render eller annan miljö
-var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
-    ?? Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL")
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
 if (string.IsNullOrEmpty(databaseUrl))
 {
-    throw new Exception("Connection string is not set. Ensure 'DATABASE_URL' or 'DATABASE_PUBLIC_URL' is configured.");
+    throw new Exception("DATABASE_URL is not set.");
 }
+
+var uri = new Uri(databaseUrl);
+var userInfo = uri.UserInfo.Split(':');
+var connectionString = $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};" +
+                       $"Database={uri.AbsolutePath.TrimStart('/')};" +
+                       $"Username={userInfo[0]};Password={userInfo[1]};" +
+                       $"SSL Mode=Require;Trust Server Certificate=true;";
+
+builder.Services.AddDbContext<BettingContext>(options =>
+    options.UseNpgsql(connectionString));
 
 // Omvandla DATABASE_URL till en PostgreSQL-anslutningssträng
 string connectionString = databaseUrl;
