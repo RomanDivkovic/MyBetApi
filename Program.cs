@@ -6,7 +6,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Hämta Connection String från Railway eller appsettings.json
-var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_PUBLIC_URL")
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrEmpty(databaseUrl))
@@ -48,6 +48,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Lägg till CORS-policy för frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy.WithOrigins("https://din-frontend-url.com") // Ändra till din frontend-URL
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+});
+
 var app = builder.Build();
 
 // Middleware för utveckling
@@ -58,6 +67,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Middleware för autentisering och auktorisering
+app.UseCors("AllowFrontend"); // Aktivera CORS
 app.UseAuthentication();
 app.UseAuthorization();
 

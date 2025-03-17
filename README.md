@@ -1,40 +1,39 @@
-# MyBetApi 🎲
+# MyBetApi 🎲  
 
-MyBetApi är en kraftfull backend för en bettingplattform där användare kan registrera sig, skapa grupper, lägga till bets och mycket mer. Detta projekt är byggt med **.NET 8**, använder **Entity Framework Core** för databasinteraktion och **JWT Authentication** för säker inloggning.
-
----
-
-## Funktionalitet 📚
-
-- **Användarhantering**: Registrera och logga in med säker lösenordshantering (BCrypt).
-- **Grupper**: Skapa grupper, hantera användare och skicka inbjudningar.
-- **Bets**: Lägg till och hantera bets.
-- **Autentisering**: Säker token-baserad autentisering med JWT.
-- **API-dokumentation**: Swagger UI för enkel API-utforskning.
+MyBetApi is a powerful backend for a betting platform where users can register, create groups, add bets, and much more. This project is built with **.NET 8**, utilizes **Entity Framework Core** for database interactions, and implements **JWT Authentication** for secure login.  
 
 ---
 
-## Teknologier 🛠
+## Features 📚  
 
-- **Backend**: .NET 8 (ASP.NET Core)
-- **Databas**: SQL Server (via Docker container)
-- **Autentisering**: JSON Web Tokens (JWT)
-- **Dokumentation**: Swagger (via Swashbuckle)
-- **Databasinteraktion**: Entity Framework Core
+- **User Management**: Register and log in with secure password handling (BCrypt).  
+- **Groups**: Create groups, manage users, and send invitations.  
+- **Bets**: Add and manage bets.  
+- **Authentication**: Secure token-based authentication using JWT.  
+- **API Documentation**: Swagger UI for easy API exploration.  
 
 ---
 
-## Installation & Uppstart 🚀
+## Technologies 🛠  
 
-### Förutsättningar
+- **Backend**: .NET 8 (ASP.NET Core)  
+- **Database**: SQL Server (via Docker container)  
+- **Authentication**: JSON Web Tokens (JWT)  
+- **Documentation**: Swagger (via Swashbuckle)  
+- **Database Interaction**: Entity Framework Core  
 
-- **.NET SDK 8.0** installerad ([Hämta här](https://dotnet.microsoft.com/))
-- **Docker** ([Installera Docker Desktop](https://www.docker.com/))
-- **Postman** eller en liknande API-klient
+---
 
-### Steg 1: Klona projektet
+## Installation & Setup 🚀  
+
+### Prerequisites  
+
+- **.NET SDK 8.0** installed ([Download here](https://dotnet.microsoft.com/))  
+- **Docker** ([Install Docker Desktop](https://www.docker.com/))  
+- **Postman** or a similar API client  
+
+### Step 1: Clone the project  
 
 ```bash
-git clone https://github.com/ditt-användarnamn/MyBetApi.git
+git clone https://github.com/your-username/MyBetApi.git
 cd MyBetApi
-```
