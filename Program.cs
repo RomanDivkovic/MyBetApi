@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ApiBet.Data; // Se till att detta är korrekt
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,27 +14,13 @@ if (string.IsNullOrEmpty(databaseUrl))
     throw new Exception("DATABASE_URL is not set.");
 }
 
+// Konvertera Render-databas-URL till korrekt format
 var uri = new Uri(databaseUrl);
 var userInfo = uri.UserInfo.Split(':');
-var connectionString = $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};" +
-                       $"Database={uri.AbsolutePath.TrimStart('/')};" +
-                       $"Username={userInfo[0]};Password={userInfo[1]};" +
-                       $"SSL Mode=Require;Trust Server Certificate=true;";
+
+var connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true;";
 
 builder.Services.AddDbContext<BettingContext>(options =>
-    options.UseNpgsql(connectionString));
-
-// Omvandla DATABASE_URL till en PostgreSQL-anslutningssträng
-string connectionString = databaseUrl;
-if (databaseUrl.StartsWith("postgresql://"))
-{
-    var uri = new Uri(databaseUrl);
-    var userInfo = uri.UserInfo.Split(':');
-    connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true;";
-}
-
-// Lägg till DbContext med PostgreSQL
-builder.Services.AddDbContext<ApiBet.Data.BettingContext>(options =>
     options.UseNpgsql(connectionString));
 
 // JWT-autentisering
@@ -83,7 +70,7 @@ app.MapControllers();
 // Automatiskt kör migrationer vid start
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApiBet.Data.BettingContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<BettingContext>();
     dbContext.Database.Migrate(); // Skapar tabeller om de inte finns
 }
 
